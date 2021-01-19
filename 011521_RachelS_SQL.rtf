@@ -1,0 +1,234 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fmodern\fcharset0 Courier;\f2\fswiss\fcharset0 ArialMT;
+}
+{\colortbl;\red255\green255\blue255;\red38\green38\blue38;\red246\green246\blue246;\red26\green26\blue26;
+\red255\green255\blue255;\red16\green60\blue192;}
+{\*\expandedcolortbl;;\cssrgb\c20000\c20000\c20000;\cssrgb\c97255\c97255\c97255;\cssrgb\c13333\c13333\c13333;
+\cssrgb\c100000\c100000\c100000;\cssrgb\c6667\c33333\c80000;}
+\margl1440\margr1440\vieww16700\viewh12480\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 1.\
+SELECT *\
+FROM invoice_line\
+WHERE unit_price > 0.99\
+\
+2.\
+\
+\pard\pardeftab720\sl320\partightenfactor0
+
+\f1\fs28\fsmilli14400 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 SELECT invoice.invoice_date, invoice.total, customer.first_name, customer.last_name \
+FROM invoice \
+JOIN customer ON invoice.customer_id = customer.customer_id\
+\
+3. \
+\
+SELECT c.first_name, c.last_name, e.first_name, e.last_name\
+FROM customer c\
+JOIN employee e ON c.support_rep_id = e.employee_id\
+\
+4.\
+select album.title, artist,name\
+from album\
+join artist on artist.artist_id = album.artist_id;\
+\
+5.\
+SELECT pt.track_id \
+FROM playlist_track pt\
+JOIN playlist pl ON pt.playlist_id = pl.playlist_id\
+WHERE pl.name = 'Music';\
+\
+6.\
+SELECT track.name\
+FROM track\
+JOIN playlist_track pt ON pt.track_id = track.track_id\
+WHERE pt.playlist_id = 5;\
+\
+7.\
+SELECT track.name, playlist.name\
+FROM track\
+JOIN playlist_track pt ON track.track_id = pt.track_id\
+JOIN playlist ON pt.playlist_id = playlist.playlist_id;\
+\
+8.\
+SELECT track.name, album.title\
+FROM track\
+JOIN album ON album.album_id = track.album_id\
+JOIN genre ON genre.genre_id = track.genre_id\
+WHERE genre.name = 'Alternative & Punk'\
+\
+NESTED QUERIES\
+\
+1.\
+SELECT * FROM invoice\
+WHERE invoice_id IN (SELECT invoice_id FROM invoice_line WHERE unit_price > 0.99); \
+\
+2.\
+SELECT * FROM playlist_track\
+WHERE playlist_id IN (SELECT playlist_id FROM playlist WHERE name = 'Music');\
+\
+3. \
+\
+SELECT name from track\
+WHERE track_id IN (SELECT track_id FROM playlist_track WHERE playlist_id = 5)\
+\
+4.\
+\
+SELECT * FROM track \
+WHERE genre_id IN (SELECT genre_id FROM genre WHERE genre.name = 'Comedy')\
+\
+5.\
+\
+SELECT * FROM track\
+WHERE album_id IN (SELECT album_id FROM album WHERE album.title = 'Fireball')\
+\
+6.\
+\
+SELECT * FROM track\
+WHERE album_id IN (SELECT album_id FROM album WHERE artist_id IN \
+                   (SELECT artist_id FROM artist WHERE artist.name = 'Queen'))\
+\
+UPDATING ROWS\
+\
+1.\
+\
+UPDATE customer\
+SET fax = null\
+WHERE fax IS NOT null\
+\
+2.\
+\
+UPDATE customer\
+SET company = 'Self'\
+WHERE company is null\
+\
+3.\
+\
+Update customer\
+SET last_name = 'Thompson'\
+WHERE first_name = 'Julia' AND last_name = 'Barnett'\
+\
+4.\
+\
+UPDATE customer\
+SET support_rep_id = 4\
+WHERE email = 'luisrojas@yahoo.cl'\
+\
+5.\
+\
+UPDATE track\
+SET composer = 'The darkness around us'\
+WHERE genre_id IN (SELECT genre_id FROM genre WHERE name = 'Metal')\
+AND composer is null\
+\
+GROUP BY\
+\
+1.\
+\
+SELECT COUNT(*), genre.name\
+FROM track\
+JOIN genre ON track.genre_id = genre.genre_id\
+GROUP BY genre.name\
+\
+2.\
+\
+SELECT COUNT(*), genre.name\
+FROM track\
+JOIN genre ON track.genre_id = genre.genre_id\
+WHERE genre.name = 'Pop' OR genre.name = 'Rock'\
+GROUP BY genre.name\
+\
+3.\
+\
+SELECT COUNT(*), artist.name\
+FROM album\
+JOIN artist ON artist.artist_id = album.artist_id\
+GROUP BY artist.name\
+\
+\
+DISTINCT\
+\
+1.\
+\
+SELECT DISTINCT composer\
+FROM track\
+\
+2.\
+\
+SELECT DISTINCT billing_postal_code\
+FROM invoice\
+\
+3.\
+\
+SELECT DISTINCT company\
+FROM customer\
+\
+DELETE\
+\
+1.\
+\
+SELECT * FROM practice_delete WHERE type = 'bronze'\
+DELETE FROM practice_delete WHERE type = 'bronze'\
+\
+2.\
+\
+SELECT * FROM practice_delete WHERE type = 'silver'\
+DELETE FROM practice_delete WHERE type = 'silver'\
+\
+\
+3.\
+\
+SELECT * FROM practice_delete WHERE value = 150\
+DELETE FROM practice_delete WHERE value = 150\
+\
+eCommerce\
+\
+\pard\pardeftab720\sl220\partightenfactor0
+
+\f2\fs20 \cf4 \cb5 \strokec4 CREATE TABLE users (\
+\'a0 user_id serial PRIMARY KEY,\
+\'a0 username VARCHAR (50),\
+\'a0 email VARCHAR (50)\
+\'a0 );\
+\'a0\
+CREATE TABLE products (\
+\'a0 product_id serial PRIMARY KEY,\
+\'a0 productname VARCHAR (50),\
+\'a0 price FLOAT (10)\
+\'a0 );\
+\'a0\
+CREATE TABLE orders (\
+\'a0 order_id serial PRIMARY KEY,\
+\'a0 product_id integer REFERENCES products (product_id),\
+\'a0 price FLOAT (10)\
+\'a0 );\
+\'a0\
+INSERT INTO users (username, email)\
+VALUES\
+('Max', '{\field{\*\fldinst{HYPERLINK "mailto:max@crazyapp.com"}}{\fldrslt \cf6 \ul \ulc6 \strokec6 max@crazyapp.com}}'),\
+('Axios', '{\field{\*\fldinst{HYPERLINK "mailto:axios@crazydog.com"}}{\fldrslt \cf6 \ul \ulc6 \strokec6 axios@crazydog.com}}'),\
+('Flea', '{\field{\*\fldinst{HYPERLINK "mailto:flea@chilipeppers.com"}}{\fldrslt \cf6 \ul \ulc6 \strokec6 flea@chilipeppers.com}}')\
+\'a0\
+INSERT INTO products (productname, price)\
+VALUES\
+('drone', 499.99),\
+('paraglider', 2000.00),\
+('housebot', 1598)\
+\'a0\
+INSERT INTO orders (price)\
+VALUES\
+(4),\
+(17),\
+(10)\
+\'a0\
+SELECT * FROM orders\
+WHERE product_id = 1\
+\'a0\
+SELECT SUM (price) AS total\
+FROM ORDERS\
+WHERE order_id = 2\
+\pard\pardeftab720\sl320\partightenfactor0
+
+\f1\fs28\fsmilli14400 \cf2 \cb3 \strokec2 \
+}
